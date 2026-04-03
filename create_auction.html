@@ -1,0 +1,66 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Create Auction</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h2>Create Auction</h2>
+
+      <form method="POST" action="/create-auction">
+        <input type="text" name="title" placeholder="Auction Title" required />
+
+        <textarea name="description" placeholder="Description"></textarea>
+
+        <select name="auction_type" required>
+          <option value="">Select Auction Type</option>
+          <option value="open">Open Auction</option>
+          <option value="sealed">Sealed Bid</option>
+          <option value="auto">Auto Bid</option>
+        </select>
+
+        <input
+          type="number"
+          name="starting_price"
+          placeholder="Starting Price"
+          min="1"
+          required
+        />
+
+        <!-- AUCTION DATE -->
+        <label>Auction Date</label>
+        <input type="date" name="auction_date" required />
+
+        <!-- AUCTION START TIME -->
+        <label>Auction Start Time</label>
+        <input type="time" name="auction_time" required />
+
+        <!-- DURATION -->
+        <label>Duration</label>
+        <div style="display: flex; gap: 10px">
+          <input
+            type="number"
+            name="duration_hours"
+            placeholder="Hours"
+            min="0"
+            required
+          />
+          <input
+            type="number"
+            name="duration_minutes"
+            placeholder="Minutes"
+            min="1"
+            max="59"
+            required
+          />
+        </div>
+
+        <button type="submit">Create Auction</button>
+      </form>
+
+      <br />
+      <a href="/seller-dashboard">← Back to Dashboard</a>
+    </div>
+  </body>
+</html>

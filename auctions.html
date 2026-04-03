@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+  <head>
+    <title>All Auctions</title>
+    <link rel="stylesheet" href="/static/style.css" />
+  </head>
+  <body>
+    <h1 class="site-title">Welcome to BIDDING SYSTEM</h1>
+
+    <div class="container">
+      <h2>All Auctions</h2>
+
+      <div class="cards">
+        {% for auction in auctions %}
+        <div
+          class="card {% if auction.status == 'active' %}active{% else %}closed{% endif %}"
+        >
+          <h3>{{ auction.title }}</h3>
+
+          <p class="price">₹{{ auction.current_price }}</p>
+
+          {% if auction.status == 'active' %}
+          <span class="badge active">Active</span>
+          {% else %}
+          <span class="badge closed">Closed</span>
+          {% endif %}
+
+          <br /><br />
+          <a href="/auction/{{ auction.auction_id }}">View Auction →</a>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </body>
+</html>

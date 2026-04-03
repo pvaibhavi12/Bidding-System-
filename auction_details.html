@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Auction Details</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h1 class="site-title">Welcome to BIDDING SYSTEM</h1>
+
+<div class="container">
+
+    <div class="card {% if auction.status == 'active' %}active{% else %}closed{% endif %}">
+        <h2>{{ auction.title }}</h2>
+
+        <p>{{ auction.description }}</p>
+
+        <p class="price">₹{{ auction.current_price }}</p>
+
+        <!-- STATUS BADGE -->
+        {% if auction.status == 'active' %}
+            <span class="badge active">Active Auction</span>
+        {% else %}
+            <span class="badge closed">Auction Closed</span>
+        {% endif %}
+
+        <!-- WINNER INFO -->
+        {% if auction.status == 'closed' %}
+            <br><br>
+            {% if is_winner %}
+                <p style="color:green; font-weight:600;">🎉 Congratulations! You won this auction.</p>
+            {% elif auction.winner_buyer_id %}
+                <p style="color:gray;">🏆 Auction has a winner.</p>
+            {% else %}
+                <p style="color:gray;">❌ No bids placed.</p>
+            {% endif %}
+        {% endif %}
+
+        <!-- TIMER -->
+        {% if auction.status == 'active' %}
+            <h3 id="timer"></h3>
+        {% endif %}
+
+        <hr style="margin: 25px 0;">
+
+        <!-- PLACE BID -->
+        <h3>Place Your Bid</h3>
+
+        {% if auction.status == 'closed' %}
+            <button disabled>Auction Ended</button>
+        {% else %}
+            <form method="POST" action="/bid/{{ auction.auction_id }}">
+                <input
+                    type="number"
+                    name="bid_amount"
+                    min="{{ auction.current_price|float + 1 }}"
+                    step="1"
+                    placeholder="Enter bid amount"
+                    required
+                >
+                <button type="submit">Place Bid</button>
+            </form>
+        {% endif %}
+
+        <hr style="margin: 25px 0;">
+
+        <!-- BID HISTORY -->
+        <h3>Bid History</h3>
+
+        {% if bids %}
+            {% for bid in bids %}
+                <p>
+                    <strong>{{ bid.name }}</strong> bid ₹{{ bid.bid_amount }}
+                </p>
+            {% endfor %}
+        {% else %}
+            <p>No bids yet.</p>
+        {% endif %}
+
+        <br>
+        <a href="/buyer-dashboard">← Back to Dashboard</a>
+    </div>
+
+</div>
+
+<!-- COUNTDOWN SCRIPT -->
+{% if auction.status == 'active' %}
+<script>
+    const endTime = new Date("{{ auction.end_time }}").getTime();
+    const timer = document.getElementById("timer");
+
+    const interval = setInterval(() => {
+        const now = new Date().getTime();
+        const diff = endTime - now;
+
+        if (diff <= 0) {
+            clearInterval(interval);
+            timer.innerHTML = "⛔ Auction Ended";
+            setTimeout(() => location.reload(), 1000);
+            return;
+        }
+
+        const hours = Math.floor(diff / (1000 * 60 * 60));
+        const minutes = Math.floor((diff / (1000 * 60)) % 60);
+        const seconds = Math.floor((diff / 1000) % 60);
+
+        timer.innerHTML = `⏳ Time Left: ${hours}h ${minutes}m ${seconds}s`;
+    }, 1000);
+</script>
+{% endif %}
+
+</body>
+</html>

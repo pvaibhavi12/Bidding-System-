@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Shipping Details</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="container">
+    <h2>📦 Shipping Information</h2>
+
+    {% if shipping %}
+        <p>
+            <strong>Shipping Address:</strong><br>
+            {{ shipping.shipping_address }}
+        </p>
+
+        <p>
+            <strong>Status:</strong>
+            {% if shipping.status == 'pending' %}
+                <span style="color:orange;">Pending</span>
+            {% elif shipping.status == 'shipped' %}
+                <span style="color:blue;">Shipped</span>
+            {% elif shipping.status == 'delivered' %}
+                <span style="color:green;">Delivered</span>
+            {% else %}
+                {{ shipping.status }}
+            {% endif %}
+        </p>
+
+        <p>
+            <strong>Tracking Number:</strong>
+            {% if shipping.tracking_number %}
+                {{ shipping.tracking_number }}
+            {% else %}
+                Not assigned yet
+            {% endif %}
+        </p>
+
+        <p>
+            <strong>Shipping Date:</strong>
+            {% if shipping.shipping_date %}
+                {{ shipping.shipping_date }}
+            {% else %}
+                Not shipped yet
+            {% endif %}
+        </p>
+
+        <p>
+            <strong>Expected Delivery:</strong>
+            {% if shipping.delivery_date %}
+                {{ shipping.delivery_date }}
+            {% else %}
+                Not available
+            {% endif %}
+        </p>
+
+    {% else %}
+        <p style="color:gray;">
+            🚫 Shipping details are not available yet.<br>
+            The product will be shipped once the auction is completed and confirmed.
+        </p>
+    {% endif %}
+
+    <br>
+    <a href="/buyer-dashboard">← Back to Dashboard</a>
+</div>
+
+</body>
+</html>

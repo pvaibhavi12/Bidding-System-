@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Buyer Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<h1 class="site-title">Welcome to BIDDING SYSTEM</h1>
+
+<div class="container">
+  <h2>Welcome, {{ name }}</h2>
+
+  <!-- 🔔 NOTIFICATIONS -->
+  {% if notifications %}
+  <div class="notifications">
+    <h3>🔔 Notifications</h3>
+    {% for note in notifications %}
+      <div class="notification">
+        {{ note.message }}
+        <small>({{ note.created_at }})</small>
+      </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <!-- 🏆 WON AUCTIONS -->
+  {% if won_auctions %}
+  <h2>🏆 Auctions You Won</h2>
+  <div class="cards">
+    {% for auction in won_auctions %}
+    <div class="card winner">
+      <h3>{{ auction.title }}</h3>
+      <p class="price">₹{{ auction.current_price }}</p>
+      <a href="/auction/{{ auction.auction_id }}">View Details</a>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+  <h2>Available Auctions</h2>
+
+  {% if auctions %}
+  <!-- 🔥 GRID STARTS HERE -->
+  <div class="cards">
+    {% for auction in auctions %}
+    <div class="card {% if auction.status == 'active' %}active{% else %}closed{% endif %}">
+      <h3>{{ auction.title }}</h3>
+
+      <span class="badge {{ auction.status }}">
+        {{ auction.status|capitalize }}
+      </span>
+
+      <p class="price">₹{{ auction.current_price }}</p>
+      <p><strong>Ends:</strong> {{ auction.end_time }}</p>
+
+      <a href="/auction/{{ auction.auction_id }}">View Auction</a>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+    <p>No auctions available.</p>
+  {% endif %}
+
+  <br>
+  <a href="/logout">Logout</a>
+</div>
+
+</body>
+</html>
